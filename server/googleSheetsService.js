@@ -120,12 +120,14 @@ async function getGoogleSheet(desiredSheetName) {
     return sheetData;
   } catch (error) {
     console.error("Error accessing Google Sheet:", error, error.message);
+    return null;
   }
 }
 
 const getFlowData = async (req, res) => {
   const flowData = await getGoogleSheet("Flow");
-  res.status(200).json(flowData);
+  if (flowData != null) return res.status(200).json(flowData);
+  return res.status(500).json({ error: "Error accessing Google Sheet" });
 };
 
 const searchGoogleSheet = async (req, res) => {
